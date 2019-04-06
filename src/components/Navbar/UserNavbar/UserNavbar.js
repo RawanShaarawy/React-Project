@@ -13,6 +13,10 @@ class UserNavbar extends Component {
         value.logout();
         this.props.history.push(`/user`);
     }
+    handleChange=(Search)=>(e)=>{
+        const val=e.target.value;
+        Search(val);
+    }
     render() {
         return (
             <MyContext.Consumer>
@@ -33,9 +37,9 @@ class UserNavbar extends Component {
                                             }}>Home</NavLink>
                                         </li>
                                         <li className="nav-item mr-4">
-                                            <NavLink exact to={{
+                                        {value.state.login?  <NavLink exact to={{
                                                 pathname: `/profile`,
-                                            }}>Profile</NavLink>
+                                            }}>Profile</NavLink>:""}
                                         </li>
                                         <li className="nav-item mr-4">
                                             <NavLink exact to={{
@@ -54,7 +58,7 @@ class UserNavbar extends Component {
                                         </li>
                                     </ul>
                                     <form className="form-inline my-2 my-lg-0 m-auto">
-                                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={this.handleChange(value.Search)} />
 
                                         <button className="btn btn-outline-primary my-2 my-sm-0" type="submit"><FontAwesomeIcon icon="search" /></button>
                                     </form>

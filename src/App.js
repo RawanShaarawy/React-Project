@@ -31,6 +31,8 @@ import book2 from '../src/assets/images/book2.jpg';
 import book3 from '../src/assets/images/book3.jpg';
 import author from '../src/assets/images/author.jpg';
 import author2 from '../src/assets/images/author2.jpg';
+import author3 from '../src/assets/images/author3.jpg';
+import author4 from '../src/assets/images/author4.jpg';
 import CategorisList from '../src/components/User/CategoryList/CategoryList';
 // -----------------------Font Awesome Import-------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -50,8 +52,10 @@ class App extends Component {
         , { name: 'aya', password: '123456', userGroup: 1, image: "pexels-photo-736716.jpeg", deleted: false, id: 2 },
       { name: 'sara', password: '123456', userGroup: 2, image: "pexels-photo-614810.jpeg", deleted: false, id: 3 }],
     authors:
-      [{ FN: 'alaa', LN: 'Ebrahim', DOB: '1/1/2010', image: author, deleted: false, id: '1' }
-        , { FN: 'aya', LN: 'Ebrahim', DOB: '2/1/2012', image: author2, deleted: false, id: '2' }
+      [{ FN: 'veronica', LN: 'roth', DOB: '1/1/2010', image: author, deleted: false, id: '1' }
+        , { FN: 'Ahmed', LN: 'khairy El-omary', DOB: '2/1/1973', image: author2, deleted: false, id: '2' },
+        { FN: 'Ahmed', LN: 'Saad El-Din', DOB: '1/1/1980', image: author3, deleted: false, id: '3' },
+        { FN: 'Ahmed', LN: 'Khaled Tawfik', DOB: '1/6/1962', image: author4, deleted: false, id: '4' }
       ],
 
     categories:
@@ -83,7 +87,7 @@ class App extends Component {
         photo: book3,
         name: "Allegiant",
         categoryId: 1,
-        authorId: 1,
+        authorId: 3,
         deleted: false
       },
       {
@@ -99,27 +103,30 @@ class App extends Component {
         photo: book3,
         name: "blue elephent",
         categoryId: 3,
-        authorId: 1,
+        authorId: 4,
         deleted: false
       }
 
     ],
     BookCurrstate: [],
+    searchValue:''
   }
   search = (name, password) => {
     const { users } = this.state;
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].name === name && users[i].password === password) {
-        return users[i];
-      }
+    const result=users.filter(u=>u.name === name && u.password === password);
+    if(result.length>0){
+      return result[0];
     }
-    return name;
+    else{
+      return name;
+    }
+  
   }
   addLogin = (user) => {
     const u = user;
     this.setState({ login: u });
   }
-  logout=()=>{ 
+  logout = () => {
     this.setState({ login: false });
   }
   addUser = (user) => {
@@ -165,15 +172,14 @@ class App extends Component {
   }
   searchCategory = (name) => {
     const { categories } = this.state;
-
-    for (var i = 0; i < categories.length; i++) {
-
-      if (categories[i].name.toLowerCase() === name.toLowerCase() && !(categories[i].deleted)) {
-
-        return false;
-      }
+    const result = categories.filter(c => c.name.toLowerCase() === name.toLowerCase() && !(c.deleted));
+    if (result.length > 0) {
+      return false;
     }
-    return true;
+    else {
+      return true;
+    }
+  
   }
 
   deleteCategory = (id) => {
@@ -194,7 +200,7 @@ class App extends Component {
     this.setState({ categories: newArray });
   }
   getCurrentBook = (id) => {
-    debugger
+   
     const BookCurrstate = this.state.Book.filter(b => (b.id === id));
     // const {BookCurrstate}=this.state;
     this.setState({ BookCurrstate });
@@ -237,7 +243,11 @@ class App extends Component {
 
     this.setState({ authors: authors });
   }
-
+Search=(text)=>{
+this.state.searchValue=text;
+this.setState({searchValue:text});
+console.log(this.state.searchValue)
+}
   //////////////////////////////////////
 
   render() {
@@ -266,7 +276,8 @@ class App extends Component {
       deleteAuthor: this.deleteAuthor,
       editAuthor: this.editAuthor,
       logout:this.logout,
-      addUser:this.addUser
+      addUser:this.addUser,
+      Search:this.Search
 
 
     }
@@ -275,7 +286,7 @@ class App extends Component {
         <Router><>
           <Switch>
 
-          
+
             <Route exact path="/user" component={HomePage} />
 
             <Route exact path="/profile" component={UserProfile} />
@@ -289,10 +300,10 @@ class App extends Component {
             <Route exact path="/author/:id" component={AuthorProfile} />
             <Route exact path="/authorsPage" component={authorsPage} />
             <Route exact path="/BookPage" component={BookPage} />
-            
+
             <Route exact path="/aboutus" component={aboutus} />
             <Route exact path="/termsandconditions" component={termsandconditions} />
-            
+
             <Route exact path="/admin" component={Home} />
             {/* <Route exact path="/books" component={Books} /> */}
 
